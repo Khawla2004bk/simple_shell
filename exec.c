@@ -1,8 +1,8 @@
 #include "shell.h"
 
 /**
- * splitstring - splits src string into words separated by the characters in sep
- * @str: string to split
+ * splitstring - splits string into words separated by the characters in sep
+ * @s: string to split
  * @del: delimiter
  * Return: arr of pntrs to words
  */
@@ -48,7 +48,7 @@ char **splitstring(char *s, const char *del)
  * execute - executes command
  * @av: array of arg
  */
-void execute(char **argv)
+void execute(char **av)
 {
 
 	int i, stts;
