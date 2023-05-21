@@ -1,16 +1,16 @@
 #include "shell.h"
 
 /**
-* checkbuild - checks if command is buildin
+* _checkbuild - checks if command is buildin
 * @av: array
 * Return: pointer
 */
-void(*checkbuild(char **av))(char **av)
+void(*_checkbuild(char **av))(char **av)
 {
 	int x, y;
 	build B[] = {
 		{"exit", exiit},
-		{"env", env},
+		{"env", _env},
 		{"setenv", __setenv},
 		{"unsetenv", __unsetenv},
 		{NULL, NULL}

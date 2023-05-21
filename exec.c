@@ -1,22 +1,22 @@
 #include "shell.h"
 
 /**
- * splitstring - splits string into words separated by the characters in sep
+ * splitstr - splits string into words separated by the characters in sep
  * @s: string to split
  * @del: delimiter
  * Return: arr of pntrs to words
  */
-char **splitstring(char *s, const char *del)
+char **splitstr(char *s, const char *del)
 {
 	int j, w;
 	char **ar;
 	char *tok;
 	char *cp;
 
-	cp = malloc(_strlen(s) + 1);
+	cp = malloc(__strlen(s) + 1);
 	if (cp == NULL)
 	{
-		perror(_getenv("_"));
+		perror(__getenv("_"));
 		return (NULL);
 	}
 	j = 0;
@@ -28,15 +28,15 @@ char **splitstring(char *s, const char *del)
 	cp[j] = '\0';
 	tok = strtok(cp, del);
 	ar = malloc((sizeof(char *) * 2));
-	ar[0] = _strdup(tok);
+	ar[0] = __strdup(tok);
 	j = 1;
 	w = 3;
 	while (tok)
 	{
 		tok = strtok(NULL, del);
-		ar = _realloc(ar, (sizeof(char *) * (w - 1)),
+		ar = __realloc(ar, (sizeof(char *) * (w - 1)),
 				(sizeof(char *) * w));
-		ar[j] = _strdup(tok);
+		ar[j] = __strdup(tok);
 		j++;
 		w++;
 	}
@@ -45,10 +45,10 @@ char **splitstring(char *s, const char *del)
 }
 
 /**
- * execute - executes command
+ * _execute - executes command
  * @av: array of arg
  */
-void execute(char **av)
+void _execute(char **av)
 {
 
 	int i, stts;
@@ -57,10 +57,10 @@ void execute(char **av)
 		return;
 	i = fork();
 	if (i == -1)
-		perror(_getenv("_"));
+		perror(__getenv("_"));
 	if (i == 0)
 	{
-		execve(av[0], av, envir);
+		execve(av[0], av, environ);
 			perror(av[0]);
 		exit(EXIT_FAILURE);
 	}
@@ -68,13 +68,13 @@ void execute(char **av)
 }
 
 /**
- * _realloc - reallocates memory
+ * __realloc - reallocates memory
  * @pntr: prev pointer
  * @osize: old size
  * @nsize: new size
  * Return: new ptr
  */
-void *_realloc(void *pntr, unsigned int osize, unsigned int nsize)
+void *__realloc(void *pntr, unsigned int osize, unsigned int nsize)
 {
 	char *n;
 	char *o;

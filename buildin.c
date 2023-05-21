@@ -10,7 +10,7 @@ void exiit(char **av)
 
 	if (av[1])
 	{
-		b = _atoi(av[1]);
+		b = __atoi(av[1]);
 		if (b <= -1)
 			b = 2;
 		freeav(av);
@@ -23,11 +23,11 @@ void exiit(char **av)
 }
 
 /**
- * _atoi - converts string to integer
+ * __atoi - converts string to integer
  *@c: pointer to a str
  *Return: int
  */
-int _atoi(char *c)
+int __atoi(char *c)
 {
 	int j = 0, i = 0, sgn = 1;
 
@@ -46,17 +46,17 @@ int _atoi(char *c)
 }
 
 /**
- * env - prints current environment
+ * _env - prints current environment
  * @av: array
  */
-void env(char **av __attribute__ ((unused)))
+void _env(char **av __attribute__ ((unused)))
 {
 	int j;
 
-	for (j = 0 ; envir[j]; j++)
+	for (j = 0 ; environ[j]; j++)
 	{
-		_puts(envir[j]);
-		_puts("\n");
+		__puts(environ[j]);
+		__puts("\n");
 	}
 }
 
@@ -70,17 +70,17 @@ void __setenv(char **av)
 
 	if (!av[1] || !av[2])
 	{
-		perror(_getenv("_"));
+		perror(__getenv("_"));
 		return;
 	}
-	for (a = 0; envir[a]; a++)
+	for (a = 0; environ[a]; a++)
 	{
 		b = 0;
-		if (av[1][b] == envir[a][b])
+		if (av[1][b] == environ[a][b])
 		{
 			while (av[1][b])
 			{
-				if (av[1][b] != envir[a][b])
+				if (av[1][b] != environ[a][b])
 					break;
 				b++;
 			}
@@ -89,18 +89,18 @@ void __setenv(char **av)
 				c = 0;
 				while (av[2][c])
 				{
-					envir[a][b + c + 1] = av[2][c];
+					environ[a][b + c + 1] = av[2][c];
 					c++;
 				}
-				envir[a][b + c + 1] = '\0';
+				environ[a][b + c + 1] = '\0';
 				return;
 			}
 		}
 	}
-	if (!envir[a])
+	if (!environ[a])
 	{
-		envir[a] = concat_all(av[1], "=", av[2]);
-		envir[a + 1] = '\0';
+		environ[a] = concat(av[1], "=", av[2]);
+		environ[a + 1] = '\0';
 	}
 }
 
@@ -114,27 +114,27 @@ void __unsetenv(char **av)
 
 	if (!av[1])
 	{
-		perror(_getenv("_"));
+		perror(__getenv("_"));
 		return;
 	}
-	for (a = 0 ; envir[a] ; a++)
+	for (a = 0 ; environ[a] ; a++)
 	{
 		b = 0;
-		if (av[1][b] == envir[a][b])
+		if (av[1][b] == environ[a][b])
 		{
 			while (av[1][b])
 			{
-				if (av[1][b] != envir[a][b])
+				if (av[1][b] != environ[a][b])
 					break;
 				b++;
 			}
 			if (av[1][b] == '\0')
 			{
-				free(envir[a]);
-				envir[a] = envir[a + 1];
-				while (envir[a])
+				free(environ[a]);
+				environ[a] = environ[a + 1];
+				while (environ[a])
 				{
-					envir[a] = envir[a + 1];
+					environ[a] = environ[a + 1];
 					a++;
 				}
 				return;
