@@ -19,6 +19,8 @@
 /*  errno and perror */
 #include <errno.h>
 
+#define MAX_BUFFER_SIZE 2050
+
 extern char **environ;
 char *concat(char *N, char *spr, char *val);
 char **splitstr(char *s, const char *del);
