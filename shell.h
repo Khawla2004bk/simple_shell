@@ -13,6 +13,7 @@
 #include <errno.h>
 
 #define MAX_BUFFER_SIZE 2050
+#define BUFFER_SIZE 1050
 
 extern char **environ;
 char *concat(char *N, char *spr, char *val);
@@ -35,6 +36,7 @@ char *__getenv(const char *N);
 
 void freeav(char **av);
 
+void _handler(char *buf);
 /**
  * struct pathl - PATH directories are contained in a linked list
  * @d: directory
