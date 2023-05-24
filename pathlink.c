@@ -2,7 +2,7 @@
 
 /**
  * __getenv - searches environment list to find environment variable name
- * @name: name of global variable
+ * @N: name of global variable
  * Return: string
  */
 char *__getenv(const char *N)
@@ -38,7 +38,7 @@ char *__getenv(const char *N)
 /**
  * add_node - adds a new node at the end of a list
  * @h: our linked list's pointer to its pointer
- * @str: pointer to str in prev first node
+ * @s: pointer to str in prev first node
  * Return: address of the new node
  */
 pathl *add_node(pathl **h, char *s)
