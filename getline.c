@@ -3,7 +3,7 @@
 char *mgetline()
 {
 	static char buf[MAX_BUFFER_SIZE];
-	static int indxbuf = 0, buf_size = 0;
+	static int indxbuf = 1, buf_size = 1;
 	char curchar = buf[indxbuf++], *l = NULL;
 	int length = 0;
 
@@ -17,8 +17,7 @@ char *mgetline()
 			{
 				if (length > 0)
 					break;
-				else
-					return NULL;
+				return (NULL);
 			}
 		}
 		if (curchar == '\n')
@@ -28,14 +27,14 @@ char *mgetline()
 	}
 	l = realloc(l, (length + 1) * sizeof(char));
 	l[length] = '\0';
-	return l;
+	return (l);
 }
 
 /**
  * main - Entry point
  * Return: 0
  */
-int main()
+int main(void)
 {
 	char *inpt = mgetline();
 
@@ -48,5 +47,5 @@ int main()
 	}
 	else
 		printf("There is no input\n");
-	return 0;
+	return (0);
 }

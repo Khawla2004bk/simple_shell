@@ -1,22 +1,15 @@
 #ifndef SHELL_H
 #define SHELL_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <stddef.h>
-/* strtok */
 #include <string.h>
-/* fork(), execve */
 #include <unistd.h>
-/* wait */
 #include <sys/wait.h>
-/* type pid */
 #include <sys/types.h>
-/* opn files */
-#include <fcntl.h>
-/* sgnl managmnt */
 #include <signal.h>
-/*  errno and perror */
 #include <errno.h>
 
 #define MAX_BUFFER_SIZE 2050

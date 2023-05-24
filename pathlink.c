@@ -94,8 +94,8 @@ char *__which(char *file, pathl *h)
 {
 	struct stat st;
 	char *str;
-
 	pathl *tp = h;
+
 	while (tp)
 	{
 		str = concat(tp->d, "/", file);
