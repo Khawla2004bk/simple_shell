@@ -1,101 +1,130 @@
 #include "shell.h"
 
 /**
- * __strdup - returns pointer to new string which is a duplicate of s
- * @s: string
- * Return: string
+ * str_len - returns length of a string
+ * @str: pointer to string
+ * Return: length of str
  */
-char *__strdup(char *s)
+int str_len(char *str)
 {
-	int a, b;
-	char *n;
+	int len = 0;
 
-	if (!s)
-		return (NULL);
-	for (b = 0; s[b] != '\0';)
-		b++;
-
-	n = malloc(sizeof(char) * b + 1);
-	if (!n)
-		return (NULL);
-
-	for (a = 0; a < b; a++)
-		n[a] = s[a];
-
-	n[b] = s[b];
-	return (n);
+	if (str == NULL)
+		return (0);
+	while (str[len++] != '\0')
+		;
+	return (--leng);
 }
 
 /**
- * concat - Concats 3 strings in freshly allocated memory
- * @N: string 1
- * @spr: string 2
- * @val: string 3
- * Return: new string
+ * str_dup - duplicates string
+ * @str: String to copy
+ * Return: pointer to array
  */
-char *concat(char *N, char *spr, char *val)
+char *str_dup(char *str)
 {
 	char *rslt;
-	int x, y, z, m, n;
+	int len, x;
 
-	x = __strlen(N);
-	y = __strlen(spr);
-	z = __strlen(val);
-	rslt = malloc(x + y + z + 1);
-
-	if (!rslt)
+	if (str == NULL)
 		return (NULL);
-	for (m = 0; N[m]; m++)
-		rslt[m] = N[m];
-
-	n = m;
-	for (m = 0; spr[m]; m++)
-		rslt[n + m] = spr[m];
-
-	n = n + m;
-	for (m = 0; val[m]; m++)
-		rslt[n + m] = val[m];
-
-	n = n + m;
-	rslt[n] = '\0';
+	len = str_len(str) + 1;
+	rslt = malloc(sizeof(char) * len);
+	if (rslt == NULL)
+	{
+		errno = ENOMEM;
+		perror("Error");
+		return (NULL);
+	}
+	for (x = 0; x < len ; x++)
+		rslt[x] = str[x];
 	return (rslt);
 }
 
 /**
- * __strlen - calculates the length of the string
- * @c: string
- * Return: length of str
+ * str_cmp - compare two strings
+ * @str1: String one
+ * @str2: String two
+ * @num: number of characters
+ * Return: 1 if strings are equals, 0 if strings are different
  */
-int __strlen(char *c)
+int str_cmp(char *str1, char *str2, int num)
 {
-	int a = 0;
+	int iter;
 
-	while (*(c + a) != '\0')
-		a++;
-	return (a);
-}
-
-/**
- * __putchar - writes the string s to stream
- * @c: character to be printed
- * Return: On success 1, On error -1, errno is set appropriately
- */
-int __putchar(char c)
-{
-	return (write(1, &c, 1));
-}
-
-/**
- * __puts - writes the string
- * @s: string
- */
-void __puts(char *s)
-{
-	int a = 0;
-
-	while (s[a])
+	if (str1 == NULL && str2 == NULL)
+		return (1);
+	if (str1 == NULL || str2 == NULL)
+		return (0);
+	if (num == 0)
 	{
-		__putchar(s[a]);
-		a++;
+		if (str_len(str1) != str_len(str2))
+			return (0);
+		for (iter = 0; str1[iter]; iter++)
+			if (str1[iter] != str2[iter])
+				return (0);
+		return (1);
+	}
+	else
+	{
+		for (iter = 0; iter < num ; iter++)
+		{
+			if (str1[iter] != str2[iter])
+			return (0);
+		}
+		return (1);
+	}
+}
+
+/**
+ * concat_str - Concatenates two strings
+ * @str1: String
+ * @str2: String
+ * Return: pointer to array
+ */
+char *concat_str(char *str1, char *str2)
+{
+	char *rslt;
+	int len1 = 0, len2 = 0;
+
+	if (str1 == NULL)
+		str1 = "";
+	len1 = str_len(str1);
+	if (str2 == NULL)
+		str2 = "";
+	len2 = str_len(str2);
+	rslt = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (rslt == NULL)
+	{
+		errno = ENOMEM;
+		perror("Error");
+		return (NULL);
+	}
+	for (len1 = 0; str1[len1] != '\0'; len1++)
+		rslt[len1] = str1[len1];
+	free(str1);
+	for (len2 = 0; str2[len2] != '\0'; len2++)
+	{
+		rslt[len1] = str2[len2];
+		len1++;
+	}
+	rslt[len1] = '\0';
+	return (rslt);
+}
+
+/**
+ * str_rev - reverses string
+ * @str: pointer to string
+ */
+void str_rev(char *str)
+{
+	int x = 0, len = str_len(str) - 1;
+	char hld;
+
+	while (x < len)
+	{
+		hld = str[x];
+		str[x++] = str[len];
+		str[len--] = hld;
 	}
 }
