@@ -35,7 +35,7 @@ void free_all(datas *info)
 
 /**
  * freearr - Frees pointer of array of pointers
- * @arr: array
+ * @dir: array
  */
 void freearr(char **dir)
 {

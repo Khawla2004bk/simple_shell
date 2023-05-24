@@ -69,7 +69,7 @@ int char_count(char *str, char *c)
 	for (; str[x]; x++)
 	{
 		if (str[x] == c[0])
-			c++;
+			count++;
 	}
-	return (c);
+	return (count);
 }

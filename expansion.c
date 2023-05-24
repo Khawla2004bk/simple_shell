@@ -9,7 +9,7 @@ void expandvar(datas *info)
 	int x, y;
 	char l[BUFFER_SIZE] = {0}, exp[BUFFER_SIZE] = {'\0'}, *tmp;
 
-	if (info->linpu == NULL)
+	if (info->linput == NULL)
 		return;
 	addbuf(l, info->linput);
 	for (x = 0; l[x]; x++)
@@ -65,7 +65,7 @@ void expandals(datas *info)
 		for (y = 0; l[x + y] && l[x + y] != ' '; y++)
 			exp[y] = l[x + y];
 		exp[y] = '\0';
-		tmp = _alias(info, exp);
+		tmp = get_als(info, exp);
 		if (tmp)
 		{
 			exp[0] = '\0';
@@ -89,6 +89,7 @@ void expandals(datas *info)
  * addbuf - Append string at the end of buffer
  * @buf: buffer to fill
  * @str: string to copy in buffer
+ * Return: ...
  */
 int addbuf(char *buf, char *str)
 {
