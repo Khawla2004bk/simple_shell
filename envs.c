@@ -17,7 +17,7 @@ int _env(datas *info)
 	{
 		for (x = 0; info->tok[1][x]; x++)
 		{
-			if (info->token[1][x] == '=')
+			if (info->tok[1][x] == '=')
 			{
 				copy = str_dup(get_key(cp, info));
 				if (copy != NULL)

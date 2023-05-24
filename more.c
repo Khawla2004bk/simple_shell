@@ -97,7 +97,7 @@ int _help(datas *info)
 #define HELP "help=\n"
 	msj[0] = HELP;
 
-	if (data->tokens[1] == NULL)
+	if (info->tok[1] == NULL)
 	{
 		__print(msj[0] + 6);
 		return (1);
@@ -147,7 +147,7 @@ int _alias(datas *info)
 	while (info->tok[++x])
 	{
 		if (char_count(info->tok[x], "="))
-			set_als(info->tokens[x], info);
+			set_als(info->tok[x], info);
 		else
 			printals(info, info->tok[x]);
 	}

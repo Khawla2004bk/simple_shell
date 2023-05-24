@@ -19,6 +19,7 @@ int mgetline(datas *info)
 		{
 			free(cmds[x]);
 			cmds[x] = NULL;
+		}
 		bytes = read(info->filedesc, &buf, BUFFER_SIZE - 1);
 		if (bytes == 0)
 			return (-1);

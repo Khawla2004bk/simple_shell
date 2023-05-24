@@ -97,5 +97,6 @@ void int_str(long num, char *str, int b);
 int __atoi(char *c);
 int char_count(char *str, char *c);
 int checkfile(char *full);
+int mgetline(datas *info);
 
 #endif

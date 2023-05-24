@@ -13,10 +13,10 @@ int printals(datas *info, char *als)
 
 	if (info->aliasl)
 	{
-		aliasl = str_len(als);
+		len = str_len(als);
 		for (x = 0; info->aliasl[x]; x++)
 		{
-			if (!als || (str_comp(info->aliasl[x], als, len)
+			if (!als || (str_cmp(info->aliasl[x], als, len)
 				&& info->aliasl[x][len] == '='))
 			{
 				for (x = 0; info->aliasl[x][y]; y++)
@@ -51,7 +51,7 @@ char *get_als(datas *info, char *als)
 	length = str_len(als);
 	for (x = 0; info->aliasl[x]; x++)
 	{
-		if (str_comp(als, info->aliasl[x], length) &&
+		if (str_cmp(als, info->aliasl[x], length) &&
 			info->aliasl[x][length] == '=')
 			return (info->aliasl[x] + length + 1);
 	}
@@ -80,7 +80,7 @@ int set_als(char *str, datas *info)
 			break;
 		}
 	for (y = 0; info->aliasl[y]; y++)
-		if (str_comp(buf, info->aliasl[y], x)
+		if (str_cmp(buf, info->aliasl[y], x)
 				&& info->aliasl[y][x] == '=')
 		{
 			free(info->aliasl[y]);

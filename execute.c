@@ -31,13 +31,13 @@ int execute(datas *info)
 			val = execve(info->tok[0], info->tok,
 					info->envt);
 			if (val == -1)
-				perror(info->cmdname),
+				perror(info->namecmd);
 					exit(EXIT_FAILURE);
 		}
 		else
 		{
 			wait(&stts);
-			if (WIFEXITED(sttus))
+			if (WIFEXITED(stts))
 				errno = WEXITSTATUS(stts);
 			else if (WIFSIGNALED(stts))
 				errno = 128 + WTERMSIG(stts);

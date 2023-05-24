@@ -20,7 +20,7 @@ int main(int ac, char *av[], char *envt[])
 		p = "$";
 	}
 	errno = 0;
-	prpt(p, info);
+	Prompt(p, info);
 	return (0);
 }
 
@@ -30,8 +30,8 @@ int main(int ac, char *av[], char *envt[])
  */
 void ctrl_c(int op UNUSED)
 {
-	_print("\n");
-	_print("$");
+	__print("\n");
+	__print("$");
 }
 
 /**
@@ -53,13 +53,13 @@ void datainit(datas *info, int ac, char **av, char **envt)
 		info->filedesc = STDIN_FILENO;
 	else
 	{
-		info->file_desc = open(av[1], O_RDONLY);
-		if (info->file_desc == -1)
+		info->filedesc = open(av[1], O_RDONLY);
+		if (info->filedesc == -1)
 		{
-			print(info->progname);
-			print(": 0: Can't open ");
-			print(av[1]);
-			print("\n");
+			__print(info->progname);
+			__print(": 0: Can't open ");
+			__print(av[1]);
+			__print("\n");
 			exit(127);
 		}
 	}

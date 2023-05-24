@@ -20,10 +20,8 @@ int builtinl(datas *info)
 	};
 	for (iter = 0; opts[iter].built != NULL; iter++)
 	{
-		if (str_comp(opts[iter].built, info->namecmd, 0))
-		{
+		if (str_cmp(opts[iter].built, info->namecmd, 0))
 			return (opts[iter].funct(info));
-		}
 	}
 	return (-1);
 }
