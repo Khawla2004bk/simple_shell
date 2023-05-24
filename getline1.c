@@ -3,7 +3,7 @@
 /**
  * mgetline - Read The Input
  * Return: Input
- * */
+ */
 char *mgetline(void)
 {
 	int j = 0;
@@ -48,7 +48,7 @@ char *mgetline(void)
 /**
  * _handler - handle hash character
  * @buf: input
- * */
+ */
 void _handler(char *buf)
 {
 	int j = 0;
