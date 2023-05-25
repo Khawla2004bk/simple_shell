@@ -1,112 +1,44 @@
 #include "shell.h"
+#define INFO_INIT \
+{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, \
+	0, 0, NULL, 0, 0, 0}
 
 /**
  * main - Entry point
- * @ac: number of values received
- * @av: values received from the cmd
- * @envt: number of values
- * Return: 0 on succes
+ * @agc: args count
+ * @agv: args vector
+ * Return: 0 on success, 1 on error
  */
-int main(int ac, char *av[], char *envt[])
+int main(int agc, char **agv)
 {
-	datas info_struct = {NULL}, *info = &info_struct;
-	char *p = "";
+	info inf[] = { INFO_INIT };
+	int f = 2;
 
-	datainit(info, ac, av, envt);
-	signal(SIGINT, ctrl_c);
-	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO) && ac == 1)
+	asm ("mov %1, %0\n\t"
+		"add $3, %0"
+		: "=r" (f) : "r" (f));
+	if (agc == 2)
 	{
-		errno = 2;
-		p = "#cisfun$ ";
-	}
-	errno = 0;
-	Prompt(p, info);
-	return (0);
-}
-
-/**
- * ctrl_c - print the prompt
- * @UNUSED: option
- */
-void ctrl_c(int op UNUSED)
-{
-	__print("\n");
-	__print("#cisfun$ ");
-}
-
-/**
- * datainit - inicialize the struct
- * @info: pointer to structure of data
- * @av: array of arguments
- * @envt: environ pased to the program
- * @ac: number of values received
- */
-void datainit(datas *info, int ac, char **av, char **envt)
-{
-	int j = 0;
-
-	info->progname = av[0];
-	info->linput = NULL;
-	info->namecmd = NULL;
-	info->countexec = 0;
-	if (ac == 1)
-		info->filedesc = STDIN_FILENO;
-	else
-	{
-		info->filedesc = open(av[1], O_RDONLY);
-		if (info->filedesc == -1)
+		f = open(agv[1], O_RDONLY);
+		if (f == -1)
 		{
-			__print(info->progname);
-			__print(": 0: Can't open ");
-			__print(av[1]);
-			__print("\n");
-			exit(127);
-		}
-	}
-	info->tok = NULL;
-	info->envt = malloc(sizeof(char *) * 50);
-	if (envt)
-	{
-		for (; envt[j]; j++)
-			info->envt[j] = str_dup(envt[j]);
-	}
-	info->envt[j] = NULL;
-	envt = info->envt;
-	info->aliasl = malloc(sizeof(char *) * 20);
-	for (j = 0; j < 20; j++)
-		info->aliasl[j] = NULL;
-}
-
-/**
- * Prompt - infinite loop shows the prompt
- * @p: prompt
- * @info: infinite loop that shows the prompt
- */
-void Prompt(char *p, datas *info)
-{
-	int error = 0, len = 0;
-
-	while (++(info->countexec))
-	{
-		__print(p);
-		error = len = mgetline(info);
-		if (error == EOF)
-		{
-			free_all(info);
-			exit(errno);
-		}
-		if (len >= 1)
-		{
-			expandals(info);
-			expandvar(info);
-			token(info);
-			if (info->tok[0])
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
 			{
-				error = execute(info);
-				if (error != 0)
-					print_error(error, info);
+				_eput(agv[0]);
+				_eput(": 0: Can't open ");
+				_eput(agv[1]);
+				eput_char('\n');
+				eput_char(FLUSH_BUFF);
+				exit(127);
 			}
-			recurdata_free(info);
+			return (EXIT_FAILURE);
 		}
+		inf->rfd = f;
 	}
+	pop_env(inf);
+	rhist(inf);
+	h(inf, agv);
+	return (EXIT_SUCCESS);
 }

@@ -1,102 +1,194 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#define PROMPT_MSG "$"
-#define UNUSED __attribute__((unused))
-#define BUFFER_SIZE 1050
+#define FILE_HIS ".simple_shell_history"
+#define MAX_HIS 5000
+#define _LOWERCASE 1
+#define _UNSIGNED 2
+#define _GETLINE 0
+#define _STRTOK 0
+#define FLUSH_BUFF -1
+#define WBUFF_SIZE 1030
+#define RBUFF_SIZE 1030
+#define _NORM 0
+#define _OR 1
+#define _AND 2
+#define _CHAIN 3
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <stddef.h>
-#include <errno.h>
-#include <signal.h>
+#include <limits.h>
 #include <fcntl.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-/**
- * struct data_info - struct for data
- * @progname: name of the executable
- * @linput: pointer to the input
- * @namecmd: pointer to the first command typed
- * @countexec: number of excecuted cmds
- * @filedesc: file descriptor
- * @tok: pointer to array
- * @envt: copy of the env
- * @aliasl: array of pointer
- */
-typedef struct data_info
-{
-	char *progname;
-	char *linput;
-	char *namecmd;
-	int countexec;
-	int filedesc;
-	char **tok;
-	char **envt;
-	char **aliasl;
-} datas;
+extern char **environ;
 
 /**
- * struct builtin_s - struct for the builtins
- * @built: the name of the builtin
- * @funct: the associated function to be called for each builtin
+ * struct strlist - linked list
+ * @n: num field
+ * @s: string
+ * @nxt: point to next node
  */
-typedef struct builtin_s
+typedef struct strlist
 {
-	char *built;
-	int (*funct)(datas *info);
-} builtin_s;
+	int n;
+	char *s;
+	struct strlist *nxt;
+} list;
 
-int logic_ops(char *cmds[], int x, char oprs[]);
-int addbuf(char *buf, char *str);
-char *str_tok(char *l, char *del);
-void freearr(char **dir);
-int setdir(datas *info, char *ndir);
-char *get_key(char *N, datas *info);
-int set_key(char *k, char *val, datas *info);
-int remove_key(char *k, datas *info);
+/**
+ * struct data - contains data to pass into function
+ * @str: string generated from getline containing arg
+ * @av: array of strings generated from str
+ * @p: string path for current command
+ * @ac: argument count
+ * @lcount: error count
+ * @ernum: the error code for exit
+ * @lflag: if on count this line
+ * @name: program filename
+ * @envt: linked list local copy of envir
+ * @envir: modified copy of environ from LL env
+ * @hist: history
+ * @als: alias
+ * @chenv: on if environ change
+ * @stts: return status of last exec'd command
+ * @cmdbuf: address of pointer to cmdbuf
+ * @buftype: CMD type || && ;
+ * @rfd: fd from which to read line input
+ * @counthist: history line number count
+ */
+typedef struct data
+{
+	char *str;
+	char **av;
+	char *p;
+	int ac;
+	unsigned int lcount;
+	int ernum;
+	int lflag;
+	char *name;
+	list *envt;
+	list *hist;
+	list *als;
+	char **envir;
+	int chenv;
+	int stts;
+	char **cmdbuf;
+	int buftype;
+	int rfd;
+	int counthist;
+} info;
 
-void datainit(datas *info, int ac, char **av, char **envt);
-void Prompt(char *p, datas *info);
-void ctrl_c(int op UNUSED);
+/**
+ *struct built - contains builtin str and related function
+ *@tp: builtin command flag
+ *@funct: function
+ */
+typedef struct built
+{
+	char *tp;
+	int (*funct)(info *);
+} built_table;
 
-int set_dir(datas *info, char *ndir);
-void expandvar(datas *info);
-void expandals(datas *info);
-void token(datas *info);
-int execute(datas *info);
-int builtinl(datas *info);
-char **pathtoken(datas *info);
-int progfind(datas *info);
-void recurdata_free(datas *info);
-void free_all(datas *info);
-int exiit(datas *info);
-int _cd(datas *info);
-int _help(datas *info);
-int _alias(datas *info);
-int _env(datas *info);
-int set_env(datas *info);
-int unset_env(datas *info);
-void printenv(datas *info);
+char *swith(const char *, const char *);
+char *str_cat(char *, char *);
+int str_cmp(char *, char *);
+int str_len(char *);
 
-char *get_als(datas *info, char *als);
-int set_als(char *str, datas *info);
-int printals(datas *info, char *als);
-int __print(char *str);
-int print_error(int error, datas *info);
-int str_len(char *str);
-char *str_dup(char *str);
-int str_cmp(char *str1, char *str2, int num);
-char *concat_str(char *str1, char *str2);
-void str_rev(char *str);
-void int_str(long num, char *str, int b);
-int __atoi(char *c);
-int char_count(char *str, char *c);
-int checkfile(char *full);
-int mgetline(datas *info);
+char *str_cpy(char *, char *);
+char *str_dup(const char *);
+void _put(char *);
+int put_char(char);
+
+char *str_ncpy(char *, char *, int);
+char *str_ncat(char *, char *, int);
+char *str_chr(char *, char);
+
+char **str_tow(char *, char *);
+char **str__tow(char *, char);
+
+int h(info *, char **);
+int _builtin(info *);
+void findcmd(info *);
+void forkcmd(info *);
+
+int iscmd(info *, char *);
+char *dupchar(char *, int, int);
+char *_path(info *, char *, char *);
+
+int puts_fd(char *s, int FD);
+int put_fd(char s, int FD);
+int eput_char(char);
+void _eput(char *);
+
+char *mem_set(char *, char, unsigned int);
+void f_free(char **);
+void *__realloc(void *, unsigned int, unsigned int);
+
+int _free(void **);
+
+int loop(char **);
+
+int interac(info *);
+int is_del(char, char *);
+int is_alpha(int);
+int __atoi(char *);
+
+int erratoi(char *);
+void printerr(info *, char *);
+int printd(int, int);
+char *conv_num(long int, int, int);
+void rmcomnt(char *);
+
+int mexit(info *);
+int mcd(info *);
+int mhelp(info *);
+int mhist(info *);
+int malias(info *);
+
+ssize_t get_inpt(info *);
+int mgetline(info *, char **, size_t *);
+void Handler(int);
+
+void clr_inf(info *);
+void set_inf(info *, char **);
+void freeinf(info *, int);
+
+char *mgetenv(info *, const char *);
+int menv(info *);
+int msetenv(info *);
+int munsetenv(info *);
+int pop_env(info *);
+char **get_envir(info *);
+int unset_env(info *, char *);
+int set_env(info *, char *, char *);
+
+char *gethist(info *inf);
+int whist(info *inf);
+int rhist(info *inf);
+int buildhist(info *inf, char *buff, int lcount);
+int renumhist(info *inf);
+
+list *addnode(list **, const char *, int);
+list *addnodeend(list **, const char *, int);
+size_t printl_str(const list *);
+int del_node(list **, unsigned int);
+void freel(list **);
+size_t listlen(const list *);
+char **liststr(list *);
+size_t printl(const list *);
+list *node_start(list *, char *, char);
+ssize_t get_index(list *, list *);
+
+int ischain(info *, char *, size_t *);
+void check(info *, char *, size_t *, size_t, size_t);
+int rep_als(info *);
+int rep_var(info *);
+int rep_str(char **, char *);
 
 #endif
